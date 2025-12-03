@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>qwaserbarIcebergs - Cuphead 2024 Iceberg Chart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+
+    
+<meta property="og:title" content="spacebarredicebergs Cuphead 2024 Iceberg">
+<meta property="og:description" content="made by spacebarred">
+
+
+
+    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="static/theme_normal.css">
+    <script src="static/vue@2.js"></script>
+    <script src="static/vue-i18n.js"></script>
+    <script src="static/linkify.min.js"></script>
+    <script src="static/linkify-string.min.js"></script>
+
+    <style>
+
+
+
+    /* default */
+    [v-cloak] { display:none }
+    [v-cloak] > * { display:none }
+
+    .svgcolor {
+      filter: invert(1) saturate(4) hue-rotate(145deg);
+    }
+
+    .breaklinks a {
+      overflow-wrap: break-word;
+    }
+
+    </style>
+    
+    
+
+</head>
+<body>
+
+
+<br>
+
+
+
+<noscript>
+<div class="redback">
+ This site needs JavaScript to work.
+ Here are the <a href="https://www.enable-javascript.com/">
+ instructions how to enable JavaScript in your web browser</a>
+</div>
+<br>
+</noscript>
+
+
+
+<div id="tooltips-container"></div>
+
+<div id="app" style="max-width: 100%;">
+  <div id="iceberg">
+  <template v-if="!watermark || (watermark && !iceberg.hidetitle)">
+  <br>
+  <div style="display: flex; flex-wrap: wrap;" v-bind:style="{'justify-content': isMobile() ? 'center' : 'space-between'}">
+    <div style="flex: 2; display: flex; justify-content: center;">
+      <span style="margin-right: auto;">
+        <template v-if="!watermark"><a v-if="iceberg.visibility == 2 || iceberg.visibility == 3" v-bind:style="{'flex-basis': isMobile() ? '110%' : null, 'display': isMobile() ? 'block' : null}" :class="'cat_' + iceberg.category.toLowerCase().replace('-', '_').replace('&', '_').replace('/', '_').replace(' ', '_')" style="font-weight: bold; border-radius: 5px; text-align: left;font-size: 100%;background-color: rgba(255,255,255,0.2);vertical-align: sub;">{{ iceberg.category }} </a><span v-else style="font-weight: bold; border-radius: 5px; text-align: left; background-color(255,255,255,0.2);vertical-align: sub;"><template v-if="iceberg.visibility==1">unlisted</template><template v-else>private</template></span></template>
+      </span>
+    </div>
+    <h1 style="flex: 4; margin-top:0px;display:flex; justify-content: center;" v-bind:style="{'flex-basis': isMobile() ? '100%' : null, 'order': isMobile() ? 2 : null, 'margin-bottom': edit ? '0px' : null}">
+      <span>{{ iceberg.name.split('_').join(' ') }} {{ OTHER_CATEGORIES.includes(iceberg.category) ? '' : $t('Iceberg') }}</span>
+     </h1>
+    <div style="flex: 2; display: flex; justify_content: center;">
+      <span style="margin-left: auto;">
+              <!-- Sharingbutton Clipboard -->
+      <template v-if="!watermark">&nbsp<template v-if="clipboardcopied"><span style="color:green">{{ $t('link copied to clipboard!') }}</span></template><button :title="$t('copy link to clipboard')" style="max-height: 25px; margin-top: 7px;" @click="copyLinkToClipboard()">📋</button></template>
+
+      </span>
+    </div>
+
+  </div>
+
+  <h1 style="margin-top:-15px;" v-bind:style="{'margin-bottom': edit ? '0px' : null}">
+  <span v-if="!watermark" v-for="icon in iceberg.icons" :title="icon" style="display: inline-block; overflow: hidden; margin: 0px; padding: 0px; width: 16px; height: 16px; background-image:url('static/icontypes.png'); background-repeat: no-repeat; vertical-align: middle;" :style="{backgroundPosition: -icontypes.indexOf(icon)*16 + 'px'}"></span>
+  <template v-if="!watermark"><span v-if="iceberg.nsfw" style="color: rgb(255, 0, 0); font-size: 60%; vertical-align: middle;" v-bind:style="{'flex-basis': isMobile() ? '110%' : null, 'display': isMobile() ? 'block' : null}">nsfw </span><span v-if="iceberg.wip" style="color: rgb(255, 243, 0); font-size: 60%; vertical-align: middle;" v-bind:style="{'flex-basis': isMobile() ? '110%' : null, 'display': isMobile() ? 'block' : null}">work in progress </span><span v-if="iceberg.proposalswanted" style="color: rgb(120, 223, 20); font-size: 60%; vertical-align: middle;" v-bind:style="{'flex-basis': isMobile() ? '110%' : null, 'display': isMobile() ? 'block' : null}">proposals wanted</span></template>
+  </h1>
+
+  <template v-if="!edit && !watermark && isMobile() && iceberg.icons.includes('>95% descriptions')">
+    <span style="font-size:80%; color: lightgreen;">{{ $t('tap and hold over overlined entries to see their description') }}</span><br><br>
+  </template>
+
+
+  <template v-if="!edit && iceberg.description.length > 0">
+<p class="breaklinks" v-html="linkifyStr(iceberg.description, {nl2br:true, rel:'nofollow'})"></p>
+  </template>
+
+  </template>
+  <div v-bind:style="{'width': iceberg.side ? '100%' : '100%'}">
+
+    <template v-if="iceberg.categories.length > 0 && iceberg.categorylegend">
+      <div class="layer" v-bind:style="{'border-color': iceberg.border.color + iceberg.border.alpha, borderWidth: parseInt(iceberg.border.alpha, 16)==0 ? '0px' : '2px' }" style=" min-height: 1vw;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        align-items: center;
+        padding-bottom: 0;">
+      <span v-for="category of iceberg.categories" style="padding-left: 2em; padding-right: 2em;">
+        <span @click="filterCategory(category)" class="categoryshadow" style="vertical-align: middle;" v-bind:style="{ color: category.fontcolor, fontFamily: category.font, fontSize: category.fontsize, fontWeight: category.fontweight }" v-bind:class="{ fontdeco: category.fontdeco, 'selectedcategory': categoryfilter.includes(category.name) }">{{ category.name }}
+        </span>
+      </span>
+      <template v-if="categoryfilter.length > 0">
+        <div style="flex-basis: 100%; height: 30;"></div>
+        <button style="margin-top: 5px;" @click="categoryfilter = []">reset category selection</button>
+      </template>
+      </div>
+    </template>
+
+    <template v-if="iceberg.subcategories.length > 0 && iceberg.subcategorylegend">
+      <div class="layer" v-bind:style="{'border-color': iceberg.border.color + iceberg.border.alpha }" style=" min-height: 1vw;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        align-items: center;
+        padding-bottom: 0;">
+      <span v-for="category of iceberg.subcategories" style="padding-left: 2em; padding-right: 2em;" @click="filterSubcategory(category)" class="categoryshadow" v-bind:class="{'selectedcategory': subcategoryfilter.includes(category.name)}">
+        <span style="vertical-align: middle;" v-bind:style="{ color: category.fontcolor, fontFamily: iceberg.font }" v-bind:class="{ fontdeco: category.fontdeco }">{{ category.name }}
+        <span style="font-size: 60%; vertical-align: top;" v-bind:style="{'color': category.fontcolor}" v-bind:class="{'fontdeco' : category.fontdeco}">{{ category.marker }}</span>
+        </span>
+      </span>
+      <template v-if="subcategoryfilter.length > 0">
+        <div style="flex-basis: 100%; height: 30;"></div>
+        <button style="margin-top: 5px;" @click="subcategoryfilter = []">reset marker filter</button>
+      </template>
+      </div>
+    </template>
+
+    <div class="icebergcontent">
+    <template v-for="(level, levelname) in iceberg.levels">
+      <template v-if="level.active">
+      <div style="display: flex; align-items: stretch;" v-bind:style="{'flex': iceberg.side ? '80% 20%' : '100%'}">
+      <div class="layer" @drop.prevent="dropLink(event, levelname, 0)" @dragenter.prevent @dragover.prevent="dragOver" v-bind:style="{backgroundImage: 'url(static/'+level.background+')', borderColor: 'rgba('+(parseInt(iceberg.border.color.slice(1,3),16)-10*levelname)+','+(parseInt(iceberg.border.color.slice(3,5),16)-10*levelname)+','+(parseInt(iceberg.border.color.slice(5,7),16)-10*levelname)+','+(parseInt(iceberg.border.alpha, 16)/255)+')', 'width': iceberg.side ? '80%' : '100%', 'min-height': edit && level.collapse ? '1vw' : iceberg.minlayerheight + 'vw', borderWidth: parseInt(iceberg.border.alpha, 16)==0 ? '0px' : '2px' }" style="background-size: 100% 100%; background-repeat: no-repeat; display: flex; flex: 10% 90%; flex-direction: column;">
+      <!--<img :src="'/static/'+level.background" alt="image" title="image" style="opacity:0 ; pointer-events: none; position: absolute; left:0; top: 0;" />-->
+      <label v-if="edit" style="left: 0; top: 0;" class="fontdeco"><input type="checkbox" v-model="level.collapse" @change="level.collapse=!level.collapse">{{ $t('Hide entries') }} ({{ level.content.length }})</label><br>
+      <h2 v-if="iceberg.uselevelnames && level.name" class="fontdeco" v-bind:style="{fontFamily: iceberg.font}">{{ level.name }}</h2>
+      <div style="
+      width: 100%; height: 100%;
+      justify-content: center;
+      align-items: center;" v-bind:style="{display: !edit && ['threecolumns', 'threecolumnscentered'].includes(iceberg.layout) ? 'block' : 'flex'}">
+      <div v-bind:class="{'left': edit}" v-bind:style="{width: edit ? '100%' : null}">
+      <ul style="margin-top:1%;" v-bind:class="{ [iceberg.layout]: !edit && ['threecolumns', 'threecolumnscentered'].includes(iceberg.layout) }">
+      <template v-if="!edit || !level.collapse" v-for="(entry, index) in level.content">
+      	<li v-bind:class="{ [iceberg.layout]: (!edit && ['shuffled', 'sidebyside'].includes(iceberg.layout)) }" v-bind:style="{'margin': edit || ['threecolumns', 'threecolumnscentered'].includes(iceberg.layout) ? '5px 20px' : '10px 20px', width: edit ? '90%' : null}">
+          <template v-if="!edit">
+          <div v-if="!clicked[entry] && ((entry.category && entry.category == 'spoiler') || (entry.subcategory && JSON.parse(entry.subcategory).map(getLowerSubcategoryName).map(sc => sc.name).includes('spoiler')))" class="spoiler" v-on:click="clickEntry(entry)">{{ "x".repeat(entry.name.length) }}</div>
+          <template v-else>
+            <template v-if="(categoryfilter.length == 0 || categoryfilter.some(elem => elem == entry.category)) && (subcategoryfilter.length == 0 || (entry.subcategory && subcategoryfilter.every(elem => JSON.parse(entry.subcategory).includes(elem))))">
+              <template v-if="entry.link">
+            		<a target="_blank" onclick="considerMiddleClick(event)" onauxclick="considerMiddleClick(event)" v-tap="openLink.bind(null, {link:fullLink(entry.link)})" v-hold="showDescription.bind(null, {description:entry.description})" :title="entry.description" :href="fullLink(entry.link)" class="entrylink" style="display: inline; word-break: break-word;"  v-bind:style="[{backgroundColor: (!watermark && entry.updated && iceberg.highlightupdated && iceberg.created < loadtime - twentyfourhours && entry.updated > loadtime - changedelta) ? iceberg.highlightrgba : null, color: entry.category ? getByKey(iceberg.categories, entry.category).fontcolor : iceberg.fontcolor, fontFamily: entry.category ? getByKey(iceberg.categories, entry.category).font : iceberg.font, fontSize: entry.category ? getByKey(iceberg.categories, entry.category).fontsize : iceberg.fontsize, fontWeight: entry.category ? getByKey(iceberg.categories, entry.category).fontweight : iceberg.fontweight }]" v-bind:class="{fontdeco: entry.category ? getByKey(iceberg.categories, entry.category).fontdeco : iceberg.fontdeco, 'hasdescription': !watermark && entry.description, overline: !edit && !watermark && entry.link}">{{ entry.name }}<template v-if="entry.subcategory"><span v-for="subcat in JSON.parse(entry.subcategory)" :title="subcat" style="font-size: 60%; vertical-align: top;" v-bind:style="{'color': getByKey(iceberg.subcategories, subcat).fontcolor, 'fontFamily': iceberg.font}" v-bind:class="{'fontdeco' : getByKey(iceberg.categories, entry.category).fontdeco, underline: !edit && !watermark && entry.description }">{{ getByKey(iceberg.subcategories, subcat).marker + ' ' }}</span></template></a>
+              </template>
+            	<template v-else>
+            		<div :title="entry.description" style="display: inline; word-break: break-word;" v-hold="showDescription.bind(null, {description:entry.description})" v-bind:style="[{backgroundColor: (!watermark && entry.updated && iceberg.highlightupdated && iceberg.created < loadtime - twentyfourhours && entry.updated > loadtime - changedelta) ? iceberg.highlightrgba : null, color: entry.category ? getByKey(iceberg.categories, entry.category).fontcolor : iceberg.fontcolor, fontFamily: entry.category ? getByKey(iceberg.categories, entry.category).font : iceberg.font, fontSize: entry.category ? getByKey(iceberg.categories, entry.category).fontsize : iceberg.fontsize, fontWeight: entry.category ? getByKey(iceberg.categories, entry.category).fontweight : iceberg.fontweight }]" v-bind:class="{fontdeco: entry.category ? getByKey(iceberg.categories, entry.category).fontdeco : iceberg.fontdeco, underline: !edit && !watermark && entry.description, 'hasdescription': !watermark && entry.description, overline: !edit && !watermark && entry.link }">{{ entry.name }}<template v-if="entry.subcategory"><span v-for="subcat in JSON.parse(entry.subcategory)" v-if="subcat != 'spoiler'" :title="subcat" style="font-size: 60%; vertical-align: top;" v-bind:style="{'color': getByKey(iceberg.subcategories, subcat).fontcolor, 'fontFamily': iceberg.font}" v-bind:class="{'fontdeco' : getByKey(iceberg.categories, entry.category).fontdeco}">{{ getByKey(iceberg.subcategories, subcat).marker + ' ' }}</span></template></div>
+            	</template>
+            </template>
+          </template>
+        </template>
+      	</li>
+      </template>
+
+      </ul>
+
+      </div>
+      </div>
+      </div>
+      <div v-if="iceberg.side" class="side" v-bind:style="{backgroundImage: 'url(static/'+level.sidebackground+')', borderColor: 'rgba('+(parseInt(iceberg.border.color.slice(1,3),16)-10*levelname)+','+(parseInt(iceberg.border.color.slice(3,5),16)-10*levelname)+','+(parseInt(iceberg.border.color.slice(5,7),16)-10*levelname)+','+(parseInt(iceberg.border.alpha, 16)/255)+')', 'min-height': iceberg.minlayerheight + 'vw'}" >
+      <div v-if="level.description" class="fontdeco">{{ level.description }}</div>
+      </div>
+      </template>
+      </template>
+    </div>
+    </div>
+    <template v-if="!watermark || (watermark && !iceberg.hidefooter)">
+      <div style="display: flex; justify-content: space-between;">
+        <p style="padding-left: 1em; color: lightgray;">
+          <template v-if="!iceberg.hidedate"><span :title="'created on ' + toDate(iceberg.created)">{{ toDate(iceberg.lastedit) }}</span></template><template v-if="!iceberg.hidedate && !iceberg.hidenumentries">, </template><template v-if="!iceberg.hidenumentries">{{ entries }} entries</template>
+        </p>
+        <p style="">
+          <template v-if="!watermark">
+              overlined entries have descriptions (hover over or tap and hold them to see them)<br>underlined entries have links
+          </template>
+        </p>
+        <p style="padding-right: 1em;">
+          <template v-if="iceberg.creator">{{ $t('made by') }}
+            <template v-for="creator in iceberg.creatorlink">
+              <span style="color: rgba(100,100,255,1.0); font-weight:bold">{{ creator.name }}</span>
+              <span v-else>{{ creator.name }}</span>
+            </template>
+          </template>
+          <span v-if="watermark" style="color:rgba(255,255,255,0.8); font-size:80%;">
+            &nbsp<template v-if="!iceberg.creator">{{ $t('created') }}</template>&nbsp{{ $t('with') }}&nbsp<span style="color:rgba(200,200,255,0.8);">icebergcharts.com</span><span v-if="iceberg.backgroundsource">, background by {{ iceberg.backgroundsource }}</span>
+          </span>
+        </p>
+      </div>
+    </template>
+  </div>
+
+
+  <template v-if="iscreated">
+
+  <template v-if="optin">
+    <template v-if="!watermark && iceberg.explainers.filter(e => !e.proposal).length > 0">
+      <h3>{{ $t('Explainer videos') }}</h3>
+
+        <div v-for="explainer in iceberg.explainers" v-if="!explainer.proposal">
+          <iframe
+          :width="isMobile() ? '90%;' : '640px'"
+          height="315"
+          v-bind:src="'https://www.youtube-nocookie.com/embed/'+explainer.id"
+          frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          title="Explainer Video"
+          ></iframe>
+        </div>
+    </template>
+
+    <template v-if="!watermark && iceberg.relevant.length > 0">
+      <h3>{{ $t('Relevant videos') }}</h3>
+      <div v-for="relevant in iceberg.relevant">
+        <iframe
+        :width="isMobile() ? '90%;' : '300px'"
+        height="200"
+        v-bind:src="'https://www.youtube-nocookie.com/embed/'+relevant.id"
+        frameborder="0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        title="Relevant Video"
+        ></iframe>
+      </div>
+    </template>
+  </template>
+  <template v-else-if="!watermark && (iceberg.explainers.filter(e => !e.proposal).length > 0 || iceberg.relevant.length > 0)">
+    <div style="background-color: black; width: 560px; max-width: 100%; height: 315px; color: white; text-align: center;">
+      By loading the explainer videos you agree to the Youtube <a href="https://policies.google.com/privacy?hl=en">privacy policy</a>
+      <button @click="doOptin()">OK</button>
+    </div>
+  </template>
+
+  </template>
+
+</div>
+
+
+
+
+<script>
+
+if (!String.prototype.startsWith) {
+    Object.defineProperty(String.prototype, 'startsWith', {
+        value: function(search, rawPos) {
+            var pos = rawPos > 0 ? rawPos|0 : 0;
+            return this.substring(pos, pos + search.length) === search;
+        }
+    });
+}
+
+
+
+const LANGMAP = {"en":"English","pt":"Portugu\u00eas","de":"Deutsch","es":"Espa\u00f1ol","ru":"\u0420\u0443\u0441\u0441\u043a\u0438\u0439","it":"Italiano","fr":"Fran\u00e7ais","zh":"Chinese","ar":"\u0627\u0644\u0639\u0631\u0628\u064a\u0629","id":"Indonesian","cy":"Cymraeg","el":"\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac","fi":"Finnish","he":"\u05e2\u05b4\u05d1\u05e8\u05b4\u05d9\u05ea","pl":"Polski","ro":"Rom\u00e2n\u0103","sk":"Slov\u00e1k","tl":"Tagalog","Id":"Indonesian","zh-yue":"Cantonese","fu":"Engwish","sim":"Simlish","arr":"Pirate"}
+
+const i18n = new VueI18n({
+    locale: localStorage.lang != null ? localStorage.lang : "en", // set default locale
+    messages: {},
+    silentTranslationWarn: true,
+})
+
+function loadLocale() {
+  var xmlhttp=new XMLHttpRequest();
+  xmlhttp.open("GET", "/translations/"+i18n.locale+".json", false);
+  xmlhttp.send();
+  if (xmlhttp.status==200 && xmlhttp.readyState == 4 ) {
+    translations = JSON.parse(xmlhttp.responseText)
+    i18n.setLocaleMessage(i18n.locale, translations)
+    document.querySelector('html').setAttribute('lang', i18n.locale);
+  } else {
+    translations = {}
+  }
+}
+
+if (i18n.locale != "en") {
+  loadLocale()
+}
+
+</script>
+
+
+
+<script src="static/tap-and-hold.js"></script>
+<script src="static/popper.min.js"></script>
+<script src="static/tippy-bundle.umd.min.js"></script>
+
+<script>
+function considerMiddleClick(event) {
+    if (!(event.button == 1 || event.button == 4)) {
+      // if not middle click, prevent default action
+      event.preventDefault()
+    }
+}
+
+window.linkifyStr = linkifyStr
+
+const popperProps = {
+    container: () => document.getElementById('tooltips-container'),
+    placement: 'top'
+};
+
+tippy.setDefaultProps(popperProps)
+
+Vue.use(vueTapAndHold, {
+	holdTime: 500, // default is 1000
+	tapTime: 200 // default is 200
+})
+
+// Register a global custom directive called `v-focus`
+Vue.directive('focus', {
+  // When the bound element is inserted into the DOM...
+  inserted: function (el) {
+    // Focus the element
+    el.focus()
+  }
+})
+
+function URIhasField(field) {
+  if (typeof window === undefined) {
+    return false;
+  }
+  var url = window.location.href;
+  if(url.indexOf('?' + field + '=') != -1) {
+    return true;
+  } else if(url.indexOf('&' + field + '=') != -1) {
+    return true;
+  }
+  return false;
+}
+
+var app = new Vue({
+  el: '#app',
+  i18n,
+  data: {
+		iceberg: {"advanced": false, "allowduplicates": false, "backgroundsource": null, "border": {"color": "purple", "style": "solid", "width": "2px"}, "categories": [], "category": "Template", "categorylegend": true, "created": 1730217110.8576443, "creator": "spacebarred", "creatorlink": [{"name": "spacebarred"}], "description": "(iceberg description here)", "disablecomments": null, "editdescriptions": true, "editlinks": true, "editsettings": {"advancedentries": false, "advancedimages": false, "advancedothers": false}, "explainers": [], "fixnsfw": null, "fixpublic": null, "font": "arial", "fontcolor": "white", "fontdeco": true, "fontsize": "100%", "fontweight": "700", "hidedate": null, "hidefooter": false, "hidenumentries": false, "hidetitle": false, "highlightalpha": null, "highlightcolor": null, "highlightrgba": "rgba(220,220,0,1)", "highlightupdated": true, "icons": ["\u003e2/3 descriptions"], "lang": "en", "lastedit": "1741272948.91205", "layout": "shuffled", "levels": [{"active": true, "background": "template_s2d2_background_0.jpg", "collapse": false, "content": [{"description": "(insert entry description here)", "link": "", "name": "(insert entry name Here)", "updated": 1730217397.617675}, {"description": "\u0027", "link": "", "name": "another iceberg entry placeholder", "updated": 1730217423.4021223}], "name": "", "sidebackground": "template_1_s_1.png"}, {"active": true, "background": "template_s2d2_background_1.jpg", "content": [{"description": "this entry has a link", "link": "#", "name": "this entry has a link", "updated": 1730217976.692554}], "name": "", "sidebackground": "template_1_s_2.png"}, {"active": true, "background": "template_s2d2_background_2.jpg", "content": [{"description": "none", "link": "", "name": "Note: there are other layers to this iceberg, but they are set to be inactive. change active: false to active: true", "updated": 1730314330.346271}], "name": "", "sidebackground": "template_1_s_3.png"}, {"active": true, "background": "template_s2d2_background_3.jpg", "content": [{"description": "spooky", "link": "", "name": "deepest entry here", "updated": 1730355853.7074487}], "name": "", "sidebackground": "template_1_s_4.png"}, {"active": false, "background": "template_s2d2_background_4.jpg", "content": [], "name": "", "sidebackground": "template_1_s_5.png"}, {"active": false, "background": "template_s2d2_background_5.jpg", "content": [], "name": "", "sidebackground": "template_1_s_6.png"}], "minlayerheight": 9.0, "modaction": false, "name": "Basic Iceberg Chart Template (mainly for my reference)", "nsfw": false, "proposalsrestricted": true, "proposalswanted": false, "public_pending": null, "public_pending_public": null, "relevant": [], "relevanticebergs": [], "side": null, "subcategories": [], "subcategorylegend": true, "tagproposals": [], "tags": ["cuphead", "spacebarred"], "uselevelnames": false, "visibility": 3, "wip": false},
+		edit: false,
+    editname: false,
+    categories: ["Animals\u0026Nature", "Anime\u0026Manga", "Art\u0026Culture", "Books\u0026Literature", "Business\u0026Organizations", "Food\u0026Cooking", "Geography", "History", "Human", "Internet", "Lost Media", "Minecraft", "Movies", "Movies-Meta", "Music", "Music-Meta", "Nostalgia", "Roblox", "Roleplaying\u0026Characters", "Science", "Sports", "Technology", "Television", "Television-Meta", "Traditional Games", "Vehicles", "Videogames-Console", "Videogames-PC", "Videogames-Meta", "Weird", "Youtube", "Meta\u0026Other", "Site related", "Site feedback", "Artbergs", "Interactive", "Linkbergs", "Surveys\u0026Polls", "Tournaments", "Memes", "Tierlists", "Personal"],
+    OTHER_CATEGORIES: ["Site feedback", "Artbergs", "Interactive", "Linkbergs", "Surveys\u0026Polls", "Tournaments", "Memes", "Tierlists", "Personal"],
+    category: "Videogames-PC",
+    layouts: {"3 columns": "threecolumns", "3 columns - centered": "threecolumnscentered", "shuffled": "shuffled", "side by side": "sidebyside"},
+    editlevels: false,
+    withinlevels: false,
+    editcsv: false,
+    fonts: ["arial", "verdana", "helvetica", "tahoma", "trebuchet ms", "times new roman", "georgia", "garamond", "courier new", "brush script mt", "amongus1", "amongus2", "pusab", "minecraft", "gumball", "bauhausbold", "spongeboy", "adultswim", "nunito", "nunitolight", "roblox", "allan", "ceviche", "federant", "londrina"],
+    fontweights: {"Bold": 700, "Extra Bold": 800, "Extra Light": 200, "Heavy": 900, "Light": 300, "Medium": 500, "Normal": 400, "Semi Bold": 600, "Thin": 100},
+    optin: false,
+    watermark: false,
+    resetdelete: false,
+    editexplainers: false,
+    editrelevant: false,
+    templates: ["Polareath\u0027s Iceberg - 8 tiers", "Ryuusu\u0027s Library - 8 tiers", "Simple 3D Iceberg - 8 tiers", "Blue Llama\u0027s Iceberg - 8 tiers", "TruMediumI\u0027s Iceberg - 10 tiers", "Trakked\u0027s Eye - 8 tiers", "Pixel Iceberg - 8 tiers", "Dy\u0027s Dimensions - 6 tiers", "Green Background - 8 tiers", "Polareath\u0027s Iceberg - 10 tiers", "Long Pixel Iceberg - 16 tiers", "Roblox Iceberg - 8 tiers", "Noidy\u0027s Ice Cube - 8 tiers", "Ludwig\u0027s Strangeberg - 10 tiers", "MS Paint Iceberg - 6 tiers", "Devin\u0027s 2D-Berg - 8 tiers", "BFDI - 8 tiers", "Simple 2D Ice - 8 tiers", "Simple 2D Ice 2 - 6 tiers", "JoeBobs\u0027 Drawing - 10 tiers", "joebobbrooks\u0027 lllong - 12 tiers", "Beetster\u0027s Good Template - 12 tiers", "Alan\u0027s Noteberg - 6 tiers", "The 0rk3berg - 8 tiers", "boredspectator\u0027s Mineberg - 10 tiers", "Morgan\u0027s Pixelberg - 6 tiers", "Morgan\u0027s Flipberg - 6 tiers", "AceHusky23\u0027s MediBangPaintBerg - 10 tiers", "InterTalk\u0027s PrettyBlue - 8 tiers", "TruMediumI\u0027s Iceberg to Heck - 20 tiers", "HeadInAMicrowave\u0027s Stickberg - 8 tiers", "Tru\u0027s Snowberg - 10 tiers", "lory\u0027s goodberg - 10 tiers", "TruMediumI\u0027s Textberg - 8 tiers", "TruMediumI\u0027s Flatberg with A Point - 8 tiers", "Oval Iceberg - 7 tiers", "HeadInAMicrowave\u0027s Landberg - 8 tiers", "HeadInAMicrowave\u0027s Bigberg - 9 tiers", "Beetsters Clipberg - 8 tiers", "Another Iceberg Doodle by Tru - 8 tiers", "Tru\u0027s Eyesglumberger - 8 tiers", "TruMediumI\u0027s Glass Window Artberg - 10 tiers", "DevenaComet\u0027s Sunset-berg - 8 tiers", "Lory\u0027s Large iceberg - 29 tiers", "TruMediumI\u0027s Creepberg - 8 tiers", "HeadInAMicrowave\u0027s Scribbleberg - 8 tiers", "HeadInAMicrowave\u0027s Giantberg - 35 tiers", "TruMediumI\u0027s Darkberg - 9 tiers", "Tru\u0027s Kawaiiberg - 8 tiers", "HeadInAMicrowave\u0027s 3dBerg - 8 tiers", "Tierlist - 7 tiers", "Black Background - 8 tiers", "Mu78L\u0027s Iceberg - 8 tiers", "InhiXD\u0027s Octoberg - 6 tiers", "MMV\u0027s Blurberg - 8 tiers", "FlamiSur\u0027s Glitchberg - 8 tiers", "TripedalStud\u0027s DoaWK Iceberg - 8 tiers", "1mvghost\u0027s Megaberg - 16 tiers", "TripedalStud\u0027s Studberg - 8 tiers", "InhiXD\u0027s Simple Iceberg - 9 tiers", "HeadInAMicrowave\u0027s AverageBerg - 8 tiers", "DarnYouToHeck\u0027s Wildlifeberg - 8 tiers", "Goofs Iceberg - 8 tiers", "ElementyFireXD\u0027s Iceberg - 7 tiers", "Blueyaus\u0027s Iceberg - 8 tiers", "Kid Cosmic on Erodius - 10 tiers", "tomrichardson1993\u0027s Fujiberg - 8 tiers", "InhiXD\u0027s Leaves to Roots - 8 tiers", "InhiXD\u0027s Medievalberg - 8 tiers", "Plackoey\u0027s Iceberg - 7 tiers", "HeadInAMicrowave\u0027s Massiveberg - 35 tiers", "HeadInAMicrowave\u0027s Deepberg - 14 tiers"],
+    templatepreview: null,
+    sortentries: false,
+    editborder: false,
+    favhover: false,
+    highlightupdated: false,
+    iscreated: false,
+    editdescription: false,
+    icontypes: ["base", "\u003e95% links", "\u003e2/3 links", "\u003e1/3 links", "has custom sidebar images", "has custom background images", "has categories", "has subcategories", "has explainer video", "\u003e95% descriptions", "\u003e2/3 descriptions", "\u003e1/3 descriptions", "community favorite - opal - top 1%", "community favorite - gold - top 5%", "community favorite - silver - top 10%", "community favorite - bronze - top 15%", "\u003e1000 entries", "\u003e500 entries", "\u003e200 entries", "\u003e125 entries"],
+    advancedmoving: false,
+    advancedmodification: false,
+    imagedownloadoptions: false,
+    changetemplate: false,
+    edittop: false,
+    editleveldescriptions: false,
+    clipboardcopied: false,
+    languages: [],
+    proposal_subcategories: [],
+    editadvancedlinks: false,
+    clicked: {},
+    loadtime: (+Date.now())/1000,
+    changedelta: 60*60*6,
+    twentyfourhours: 60*60*24,
+    proposalcolor: "green",
+    proposalstatus: null,
+    proposetier: null,
+    advancedmodificationtier: null,
+    commenterror: "",
+    levelsubcats: {},
+    owneronly: false,//autoreplace edit code only for original creator
+    editrelevanticebergs: false,
+    categoryfilter: [],
+    subcategoryfilter: [],
+    editsettings: false,
+    MAXENTRIESPERLAYER: 300,
+    nocategorywarnings: 0,
+    visibilitychanged: false,
+  },
+  mounted: function mounted(){
+    this.iscreated = true;
+  },
+  created: function created() {
+  },
+  computed: {
+    hasEnoughEntries() {
+      if (this.iceberg.levels === undefined) {
+        return false;
+      }
+
+      var entries = 0;
+      for (level of this.iceberg.levels) {
+        entries += level.content.length
+      }
+      return entries >= 15;
+    },
+    entries: function() {
+      return this.iceberg.levels.reduce((a,b)=>a+b.content.length, 0)
+    },
+    linktext: function() {
+      return this.iceberg.name.split('_').join(' ') + " Iceberg Chart"
+    },
+  },
+	methods: {
+    doOptin() {
+      app.optin = true;
+    },
+    fullLink(link) {
+      if (link.indexOf(":") == -1) {
+        return "https://" + link;
+      }
+      return link;
+    },
+    has95pLinks: function() {
+      return this.iceberg.icons.includes(">95% links")
+    },
+    has95pDescriptions: function() {
+      return this.iceberg.icons.includes(">95% descriptions")
+    },
+    clickEntry(entry) {
+      this.clicked[entry] = true;
+    },
+    remPropSubCat(subcat) {
+      app.proposal_subcategories = app.proposal_subcategories.filter(e => e != subcat)
+    },
+    linkifyStr(str, opts) {
+      return window.linkifyStr(str, opts)
+    },
+    copyLinkToClipboard() {
+      navigator.clipboard.writeText(window.location.href)
+
+      app.clipboardcopied = true;
+
+      setTimeout(() => {
+        app.clipboardcopied = false;
+      }, 3000)
+    },
+    toDate(timestamp) {
+        var d = new Date(timestamp*1000),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        return [year, month, day].join('-');
+    },
+    isMobile() {
+      /*
+      if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        return true
+      } else {
+        return false
+      }
+      */
+      return window.innerWidth <= 760;
+    },
+    collapseAll(collapse) {
+      app.collapse = collapse
+    },
+    getByKey(arr,key) {
+      return arr.find(x => x.name === key) || {}
+    },
+    getLowerSubcategoryName(key) {
+      return this.getByKey(this.iceberg.subcategories, key)
+    },
+    showPreview(templatename) {
+      app.templatepreview = "static/" + templatename + ".jpg";
+    },
+    clearPreview() {
+      app.templatepreview = null;
+    },
+    showDescription(params) {
+      //console.log(event)
+      var description = params.description;
+      if (description) {
+        var instance = tippy(event.currentTarget, {content: description})
+        instance.show()
+        //console.log(description)
+      }
+    },
+    filterCategory(category) {
+      if (this.categoryfilter.includes(category.name)) {
+        this.categoryfilter.splice(this.categoryfilter.indexOf(category.name), 1)
+      } else {
+        this.categoryfilter.push(category.name)
+      }
+      app.$forceUpdate()
+    },
+    filterSubcategory(subcategory) {
+      if (this.subcategoryfilter.includes(subcategory.name)) {
+        this.subcategoryfilter.splice(this.subcategoryfilter.indexOf(subcategory.name), 1)
+      } else {
+        this.subcategoryfilter.push(subcategory.name)
+      }
+      app.$forceUpdate()
+    },
+    openLink(params) {
+      console.log("here")
+      var link = params.link;
+      console.log(params)
+      //console.log("opening", link)
+      if (link) {
+        window.open(link, '_blank');
+      }
+    },
+	}
+})
+
+</script>
+
+<style>
+
+.floatright {
+  float: right;
+  right: 0;
+}
+
+.favorite {
+
+}
+
+.entryinput {
+  border: 1px #ccc solid;
+  border-radius: 5px;
+  height: 2em;
+}
+
+.updated {
+  background-color: rgba(255,245,200,0.75);
+}
+
+.saved {
+    animation-name: example;
+    animation-duration: 2s;
+}
+
+@keyframes example {
+  from {background-color: lightgreen;}
+  to {background-color: white;}
+}
+
+.entrylink:hover {
+  filter: brightness(80%);
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+.tree-menu {
+  border: 1px solid purple;
+  margin: 1em;
+  min-width: 25em;
+}
+
+.tree-menu:nth-child(2n) {
+    background-color: rgba(0,0,120,0.2);
+}
+
+.tree-menu:nth-child(2n+1) {
+    background-color: rgba(0,0,100,0.2);
+}
+
+.side {
+  background-color: black;
+  background-position: center;
+  min-height:10vw;
+  padding-bottom: 1em;
+  border: 2px solid purple;
+  background-size: cover;
+  display: inline-block;
+  float: right;
+  width: 20%;
+}
+
+.updatedentry {
+  background-color: rgba(255,255,0,0.9);
+}
+
+.edited {
+  background-color: lightyellow;
+}
+
+
+.layer {
+	border: solid purple;
+	background-size: cover;
+	background-position: center;
+	padding-bottom: 1em;
+}
+
+.layer h2 {
+  margin-bottom: 0;
+}
+
+@media screen and (max-width : 480px) {
+  .layer {
+    border: 1px solid purple;
+  }
+
+  .side {
+    border: 1px solid purple;
+  }
+}
+
+.left {
+  text-align: left;
+}
+
+.spoiler {
+  background-color: #333333;
+  border-radius: 0.2em;
+  color: transparent !important;
+  z-index: 100;
+}
+
+.spoiler:target {
+  background: transparent;
+  color: inherit;
+}
+
+.advancedimages {
+  background-color: rgba(255,255,0,0.3);
+}
+
+.advancedentries {
+  background-color: rgba(255,0,255,0.3);
+}
+
+.advancedlevels {
+  background-color: rgba(0,255,255,0.3);
+}
+
+.advancedothers {
+  background-color: rgba(255,255,255,0.3);
+}
+
+.notfavorite:hover {
+  color: gold;
+}
+
+.proposalheader {
+  text-decoration: underline;
+  font-size: 110%;
+}
+
+.proposal {
+  color: rgba(100,140,200,0.8);
+  font-style: italic;
+  padding-left: 10px;
+}
+
+.categoryshadow:hover {
+  filter: brightness(85%);
+}
+
+.selectedcategory {
+  border: 2px solid purple;
+  border-radius: 10px;
+  background-color: rgba(255,255,255,0.8);
+}
+</style>
+
+
+
+</body>
+</html>
